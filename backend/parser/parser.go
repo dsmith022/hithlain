@@ -49,8 +49,12 @@ func (p *Parser) NextToken() Token {
 		token = newToken(TEXT, p.ch)
 
 	default:
-		newToken(TEXT, p.ch)
-
+		if isLetter(p.ch){
+			token.Literal = p.readIdentifier()
+			return token
+		}else{
+			token = newToken(ILLEGAL, p.ch)
+		}
 	}
 	p.readChar()
 	return token
@@ -59,3 +63,22 @@ func (p *Parser) NextToken() Token {
 func newToken(tt TokenType, ch byte) Token {
 	return Token{Type: tt, Literal: string(ch)}
 }
+
+
+func (p *Parser) readIdentifier() string{
+	position := p.position
+	for isLetter(p.ch){
+		p.readChar()
+	}
+	return p.body[position:p.position]
+}
+
+func isLetter(ch byte) bool {
+	invalidChars := ['{', '}', '[', ']', '$', ' ', '\n' ]
+	isValid = true
+	
+}
+
+
+
+
