@@ -21,11 +21,11 @@ const (
 	LINKEDNODE = "LINKEDNODE"
 
 	//Primitive types
-	EOF     = ""
-	TEXT    = "TEXT"
-	INT     = "INT"
-	ILLEGAL = "ILLEGAL"
-	IDENT   = "IDENT"
+	EOF        = ""
+	WHITESPACE = "WHITESPACE"
+	TEXT       = "TEXT"
+	INT        = "INT"
+	ILLEGAL    = "ILLEGAL"
 
 	//Operators
 	PLUS   = "+"
@@ -33,7 +33,12 @@ const (
 	EQUALS = "="
 )
 
-// Placeholder for later
+/*Do we need these functions?
+ Because we will not be parsing keywords (ie let, fn)
+ in the way that Monkey does in the interpreter reference. TBD
+
+
+
 var keywords = map[string]TokenType{}
 
 func LookupIdent(ident string) TokenType {
@@ -41,4 +46,4 @@ func LookupIdent(ident string) TokenType {
 		return token
 	}
 	return TEXT
-}
+}*/
