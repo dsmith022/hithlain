@@ -1,6 +1,8 @@
 package parser
 
-import "strings"
+import (
+	"strings"
+)
 
 type Lexer struct {
 	body         string
@@ -59,9 +61,20 @@ func (l *Lexer) NextToken() Token {
 
 	default:
 		if isLetter(l.ch) {
-			token.Literal = l.readText()
 			token.Type = TEXT
+
+			if l.position > 0 {
+				switch l.body[l.position-1] {
+				case '$':
+					token.Type = VALNAME
+				case '[':
+					token.Type = LINKEDNODE
+				}
+			}
+
+			token.Literal = l.readText()
 			return token
+
 		} else if isWhitespace(l.ch) {
 			token.Literal = l.readWhitespace()
 			token.Type = WHITESPACE
@@ -94,7 +107,7 @@ func (l *Lexer) readText() string {
 func isLetter(ch byte) bool {
 	illegals := "${}[]+-="
 
-	return !isDigit(ch) && !isWhitespace(ch) && !strings.ContainsRune(illegals, rune(ch))
+	return !isDigit(ch) && !isWhitespace(ch) && ch != 0 && !strings.ContainsRune(illegals, rune(ch))
 }
 
 func (l *Lexer) readNumber() string {

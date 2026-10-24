@@ -21,15 +21,15 @@ func TestNextToken(t *testing.T) {
 		{TEXT, "me."},
 		{LVAL, "{"},
 		{VALSIGN, "$"},
-		{TEXT, "friend"},
+		{VALNAME, "friend"},
 		{PLUS, "+"},
 		{INT, "1"},
 		{RVAL, "}"},
 		{LLINK, "["},
-		{TEXT, "Woody"},
+		{LINKEDNODE, "Woody"},
 		{RLINK, "]"},
 		{LLINK, "["},
-		{TEXT, "Buzz"},
+		{LINKEDNODE, "Buzz"},
 		{RLINK, "]"},
 	}
 
