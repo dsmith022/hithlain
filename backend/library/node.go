@@ -1,4 +1,4 @@
-package nodes
+package library
 
 type node struct {
 	depth    int
