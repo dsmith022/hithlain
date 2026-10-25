@@ -9,12 +9,18 @@ type Token struct {
 
 const (
 
-	//Identifiers
+	//Syntax
 	LVAL    = "{"
 	RVAL    = "}"
 	LLINK   = "["
 	RLINK   = "]"
 	VALSIGN = "$"
+
+	//Identifiers
+	SET  = "SET"
+	IF   = "IF"
+	ELSE = "ELSE"
+	NEW  = "NEW"
 
 	//Value types
 	VALNAME    = "VALNAME"
@@ -31,19 +37,20 @@ const (
 	PLUS   = "+"
 	MINUS  = "-"
 	EQUALS = "="
+	TIMES  = "*"
+	DIV    = "/"
 )
 
-/*Do we need these functions?
- Because we will not be parsing keywords (ie let, fn)
- in the way that Monkey does in the interpreter reference. TBD
-
-
-
-var keywords = map[string]TokenType{}
+var keywords = map[string]TokenType{
+	"set":  SET,
+	"if":   IF,
+	"else": ELSE,
+	"new":  NEW,
+}
 
 func LookupIdent(ident string) TokenType {
 	if token, ok := keywords[ident]; ok {
 		return token
 	}
 	return TEXT
-}*/
+}

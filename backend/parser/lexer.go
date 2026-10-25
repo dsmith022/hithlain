@@ -58,21 +58,31 @@ func (l *Lexer) NextToken() Token {
 		token = newToken(MINUS, l.ch)
 	case '=':
 		token = newToken(EQUALS, l.ch)
+	case '*':
+		token = newToken(TIMES, l.ch)
+	case '/':
+		token = newToken(DIV, l.ch)
 
 	default:
 		if isLetter(l.ch) {
-			token.Type = TEXT
+
+			matched := false
 
 			if l.position > 0 {
 				switch l.body[l.position-1] {
 				case '$':
 					token.Type = VALNAME
+					matched = true
 				case '[':
 					token.Type = LINKEDNODE
+					matched = true
 				}
 			}
-
 			token.Literal = l.readText()
+			if matched == false {
+				token.Type = LookupIdent(token.Literal)
+			}
+
 			return token
 
 		} else if isWhitespace(l.ch) {
@@ -105,7 +115,7 @@ func (l *Lexer) readText() string {
 }
 
 func isLetter(ch byte) bool {
-	illegals := "${}[]+-="
+	illegals := "${}[]+-=*/"
 
 	return !isDigit(ch) && !isWhitespace(ch) && ch != 0 && !strings.ContainsRune(illegals, rune(ch))
 }

@@ -3,7 +3,7 @@ package parser
 import "testing"
 
 func TestNextToken(t *testing.T) {
-	input := `You've got a friend in me.{$friend+1}[Woody][Buzz]`
+	input := `You've got a friend in me.{set new $friend+1}[Woody][Buzz]*/if else`
 	tests := []struct {
 		expectedType    TokenType
 		expectedLiteral string
@@ -20,6 +20,10 @@ func TestNextToken(t *testing.T) {
 		{WHITESPACE, " "},
 		{TEXT, "me."},
 		{LVAL, "{"},
+		{SET, "set"},
+		{WHITESPACE, " "},
+		{NEW, "new"},
+		{WHITESPACE, " "},
 		{VALSIGN, "$"},
 		{VALNAME, "friend"},
 		{PLUS, "+"},
@@ -31,6 +35,11 @@ func TestNextToken(t *testing.T) {
 		{LLINK, "["},
 		{LINKEDNODE, "Buzz"},
 		{RLINK, "]"},
+		{TIMES, "*"},
+		{DIV, "/"},
+		{IF, "if"},
+		{WHITESPACE, " "},
+		{ELSE, "else"},
 	}
 
 	l := NewLexer(input)
