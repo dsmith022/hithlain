@@ -19,7 +19,7 @@ func setupConfig() error {
 
 	viper.SetDefault(
 		"libPath",
-		filepath.Join(home, ".hithlain.json"),
+		filepath.Join(home, "/hitlain.db"),
 	)
 	viper.AutomaticEnv()
 
