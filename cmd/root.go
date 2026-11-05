@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var librarian *library.Librarian
+var librarian *library.Store
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -38,7 +38,7 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&librarian.FilePath, "libraryPath", "", "library storage (default is $HOME/.hithlain.json)")
+	//rootCmd.PersistentFlags().StringVar(&librarian.FilePath, "libraryPath", "", "library storage (default is $HOME/.hithlain.db)")
 	if err := setupConfig(); err != nil {
 		fmt.Printf("Error initializing hithlain: %v", err)
 		return
