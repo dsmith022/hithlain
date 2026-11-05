@@ -1,47 +1,45 @@
 package library
 
 import (
-	"encoding/json"
+	"database/sql"
 	"fmt"
 	"os"
-
-	"github.com/spf13/viper"
+	"path/filepath"
 )
 
-func LoadLibrary(path string) (*Librarian, error) {
-	librarian := &Librarian{
-		Library:  make([]Story, 0),
-		FilePath: path,
-	}
+type Store struct {
+	DB *sql.DB
+}
 
-	data, err := os.ReadFile(path)
-
-	if err != nil {
+func Open(dir string) (*Store, error) {
+	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
 	}
 
-	if err := json.Unmarshal(data, librarian); err != nil {
-		return nil, fmt.Errorf("decode library: %w", err)
-	}
+	path := filepath.Join(dir, "hithlain.db")
 
-	return librarian, nil
-
-}
-
-func (l *Librarian) SaveLibrary() error {
-	data, err := json.MarshalIndent(l, "", "	")
+	conn, err := sql.Open("sqlite", path)
 	if err != nil {
-		fmt.Printf("Error saving library: %v\n", err)
-		return err
+		return nil, fmt.Errorf("opening database: %w", err)
 	}
-	os.WriteFile(l.FilePath, data, 0644)
-	return nil
+
+	conn.SetMaxOpenConns(1)
+
+	if _, err := conn.Exec("PRAGMA foreign_keys = ON"); err != nil {
+		conn.Close()
+		return nil, err
+	}
+
+	store := &Store{DB: conn}
+
+	if err := store.Init(); err != nil {
+		conn.Close()
+		return nil, err
+	}
+
+	return store, nil
 }
 
-func (l *Librarian) GetLibraryPath() string {
-	if l.FilePath != "" {
-		return l.FilePath
-	}
-
-	return viper.GetString("libraryPath")
+func (s *Store) Close() error {
+	return s.DB.Close()
 }

@@ -28,8 +28,6 @@ grey as gathered mist and soft as silk beneath the hand;
 woven in Lórien by arts unspoken, whose making was hidden from all save those who wrought it.
 
 2) A lightweight engine for weaving branching RPG stories, choices, and game state into playable text adventures.`,
-	PersistentPreRun:  loadLibrary,
-	PersistentPostRun: saveLibrary,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -41,19 +39,9 @@ func Execute() error {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&librarian.FilePath, "libraryPath", "", "library storage (default is $HOME/.hithlain.json)")
-
-}
-
-func loadLibrary(cmd *cobra.Command, args []string) {
-	var err error
-	librarian, err = library.LoadLibrary(librarian.GetLibraryPath())
-	if err != nil {
-		fmt.Fprintln(cmd.ErrOrStderr(), "Error loading library:", err)
+	if err := setupConfig(); err != nil {
+		fmt.Printf("Error initializing hithlain: %v", err)
+		return
 	}
-}
 
-func saveLibrary(cmd *cobra.Command, args []string) {
-	if err := librarian.SaveLibrary(); err != nil {
-		fmt.Fprintln(cmd.ErrOrStderr(), "Error saving library:", err)
-	}
 }

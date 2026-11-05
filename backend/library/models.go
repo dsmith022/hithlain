@@ -10,23 +10,19 @@ only node with no Parents and mark the starting point for the story.
 'Body' denotes the unparsed raw text body entered via nano.
 */
 type Node struct {
-	ID        int       `json:"id"`
-	StoryID   int       `json:"story_id"`
-	Body      string    `json:"body"`
-	Parents   []Node    `json:"parents"`
-	Children  []Node    `json:"children"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        int64
+	Title     string
+	StoryID   int64
+	Body      string
+	ParentIDs []int
+	ChildIDs  []int
+	CreatedAt time.Time
 }
 
 type Story struct {
-	ID        int       `json:"id"`
-	RootNode  Node      `json:"first_node"`
-	Nodes     []Node    `json:"nodes"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-// Librarian is the account-linked object which acts as the topmost point of a savefile's filetree.
-type Librarian struct {
-	Library  []Story `json:"library"`
-	FilePath string  `json:"-"`
+	ID        int64
+	Title     string
+	RootNode  *Node
+	Nodes     []*Node
+	CreatedAt time.Time
 }
